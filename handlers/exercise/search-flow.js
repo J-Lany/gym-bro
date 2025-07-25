@@ -1,18 +1,22 @@
 import Exercise from '../../models/Exercise.js';
 import backButton from '../../keyboards/back-button.js';
 import { InlineKeyboard } from 'grammy';
-import mainMenu from '../../keyboards/main-menu.js';
 import { matchByWords } from '../../utils/match-by-words.js';
 import matchByFuzzyTitle from '../../utils/match-by-fuzzy-title.js';
 import showExercise from './show-exercise.js';
-import { safeReplyText, safeReplyVideo } from '../utils/safe-replies.js';
+import { safeReplyText } from '../utils/safe-replies.js';
+import { pushToHistory } from '../utils/work-with-history.js';
+import { goBack } from '../utils/navigation.js';
 
 export default async function handleSearchText(ctx) {
   const input = ctx.message.text;
 
+  if (input !== '🔙 Назад') {
+    pushToHistory(ctx, 'searchText');
+  }
+
   if (input === '🔙 Назад') {
-    ctx.session = {};
-    return safeReplyText(ctx, '🔙 Возврат в меню', { reply_markup: mainMenu });
+    return goBack(ctx);
   }
 
   const query = input.trim().toLowerCase();
@@ -28,14 +32,13 @@ export default async function handleSearchText(ctx) {
     const kb = new InlineKeyboard();
 
     wordMatches.slice(0, 5).forEach((ex) => {
-      kb.text(ex.title, `show_ex:${ex._id}`);
+      kb.text(ex.title, `show_ex:${ex._id}`).row();
     });
     kb.row().text('🔙 Назад', 'menu:back');
 
-    return safeReplyVideo(
+    return safeReplyText(
       ctx,
-      ex.videoFileId,
-      `🏋🏽‍♀️ <b>${ex.title}</b>\n\n<i>${ex.description}</i>`,
+      '🔍  Лучше уточнить вопрос, но, возможно, ты в поиске чего-то типа этого:',
       kb
     );
   }

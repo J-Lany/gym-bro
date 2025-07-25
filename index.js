@@ -89,7 +89,7 @@ bot.on('message:video', async (ctx) => {
     return handleEditVideo(ctx);
   }
 
-  return ctx.reply('❗ Я не ожидал видео. Используй меню.');
+  return ctx.reply('❗ Я не ожидала видео. Используй меню.');
 });
 
 bot.callbackQuery(/^show_ex:(.+)/, async (ctx) => {

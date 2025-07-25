@@ -1,6 +1,9 @@
 import Exercise from '../../models/Exercise.js';
 import backButton from '../../keyboards/back-button.js';
 import { InlineKeyboard } from 'grammy';
+import { capitalizeFirstLetter } from '../utils/capitalize-first-letter.js';
+import { safeReplyText } from '../utils/safe-replies.js';
+import { pushToHistory } from '../utils/work-with-history.js';
 
 const PAGE_SIZE = 5;
 
@@ -8,6 +11,8 @@ export default async function handleSearchByTag(ctx) {
   if (ctx.callbackQuery) {
     await ctx.answerCallbackQuery();
   }
+
+  pushToHistory(ctx, 'searchByTag');
 
   const tag = ctx.match[1];
 
@@ -37,22 +42,12 @@ export async function sendExercisePage(ctx) {
     kb.text(ex.title, `show_ex:${ex._id}`).row();
   });
 
-  if (page > 0) kb.text('⬅️ Назад', 'tag_page:prev');
-  if (end < allExercises.length) kb.text('➡️ Вперёд', 'tag_page:next');
+  if (page > 0) kb.text('<<<<<<', 'tag_page:prev');
+  if (end < allExercises.length) kb.text('>>>>>', 'tag_page:next');
 
   kb.row().text('🔙 Назад', 'menu:back');
 
-  const pageText = `🏷 Упражнения с категорией "${tag}"`;
+  const pageText = `🔹 Упражнения из категории "${capitalizeFirstLetter(tag)}"`;
 
-  if (ctx.callbackQuery) {
-    await ctx.editMessageText(pageText, {
-      reply_markup: kb,
-      parse_mode: 'HTML',
-    });
-  } else {
-    await ctx.reply(pageText, {
-      reply_markup: kb,
-      parse_mode: 'HTML',
-    });
-  }
+  await safeReplyText(ctx, pageText, kb);
 }

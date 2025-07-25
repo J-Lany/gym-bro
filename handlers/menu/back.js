@@ -1,5 +1,5 @@
 import mainMenu from '../../keyboards/main-menu.js';
-import { safeReplyText } from '../utils/safe-replies.js';
+import { goBack } from '../utils/navigation.js';
 
 export default async function handleBack(ctx) {
   await ctx.answerCallbackQuery?.();
@@ -12,7 +12,6 @@ export default async function handleBack(ctx) {
       reply_markup: mainMenu,
     });
   } else {
-    ctx.session = {};
-    await safeReplyText(ctx, '🔙 Окей, мы вернулись в меню:', mainMenu);
+    await goBack(ctx);
   }
 }

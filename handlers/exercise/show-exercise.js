@@ -13,7 +13,7 @@ export default async function showExercise(ctx, id) {
 
   const caption = `🏋🏽‍♀️ <b>${ex.title}</b>\n\n<i>💬 ${ex.description}</i>`;
 
-  if (ctx.callbackQuery?.message) {
+  if (ctx.callbackQuery?.message?.video) {
     return ctx.editMessageMedia(
       {
         type: 'video',

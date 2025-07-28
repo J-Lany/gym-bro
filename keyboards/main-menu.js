@@ -5,4 +5,5 @@ export default new InlineKeyboard()
   .row()
   .text('📋 Список', 'menu:list')
   .text('➕ Добавить', 'menu:add')
-  .row();
+  .row()
+  .text('📝 Создать план', 'menu:create_plan');

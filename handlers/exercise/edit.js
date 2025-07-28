@@ -1,6 +1,5 @@
 import Exercise from '../../models/Exercise.js';
 import isAdmin from '../admin/access-check.js';
-import backButton from '../../keyboards/back-button.js';
 import { InlineKeyboard } from 'grammy';
 import mainMenu from '../../keyboards/main-menu.js';
 
